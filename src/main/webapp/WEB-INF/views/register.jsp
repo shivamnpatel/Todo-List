@@ -27,7 +27,7 @@
 
 					<div class="card-body">
 
-						<form:form action="RegisterUser" method="post" modelAttribute="registerUser">
+						<form:form action="register" method="post" modelAttribute="registerUser">
 
 							<div class="form-group">
 								<form:input class="form-control" name="userName"

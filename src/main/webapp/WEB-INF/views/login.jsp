@@ -25,7 +25,7 @@
 
 					<div class="card-body">
 
-						<form:form action="LoginUser" method="post" modelAttribute="loginUser">
+						<form:form action="login" method="post" modelAttribute="loginUser">
 							
 							<div class="form-group">
 								<form:input type="email" class="form-control" name="userEmail"

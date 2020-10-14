@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -22,13 +24,14 @@ public class Todo {
 	@Size(min = 10, message = "Enter at least 10 characters")
 	private String description;
 
-	private String targetDate;
+	@Temporal(TemporalType.DATE)
+	private Date targetDate;
 
 	public Todo() {
 
 	}
 
-	public Todo(String userEmail, String description, String targetDate) {
+	public Todo(String userEmail, String description, Date targetDate) {
 		this.userEmail = userEmail;
 		this.description = description;
 		this.targetDate = targetDate;
@@ -58,11 +61,11 @@ public class Todo {
 		this.description = description;
 	}
 
-	public String getTargetDate() {
+	public Date getTargetDate() {
 		return targetDate;
 	}
 
-	public void setTargetDate(String targetDate) {
+	public void setTargetDate(Date targetDate) {
 		this.targetDate = targetDate;
 	}
 

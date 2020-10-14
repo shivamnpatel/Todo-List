@@ -2,6 +2,11 @@ body{
 	 background-color: #63738a;
 }
 
+.bg-image{
+	height: 500px;
+	width: 600px;
+	
+}
 .error{
 	color: red;	
 }

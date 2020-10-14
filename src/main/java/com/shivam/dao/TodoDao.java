@@ -1,5 +1,6 @@
 package com.shivam.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -13,7 +14,7 @@ import com.shivam.helper.FactoryProvider;
 public class TodoDao {
 
 	// save todo with userEmail in database for add-todo page
-	public void saveTodo(String desc,String targetDate, String userEmail) 
+	public void saveTodo(String desc,Date targetDate, String userEmail) 
 	{
 		Session session = FactoryProvider.getSessionFactory().openSession();
 		session.beginTransaction();

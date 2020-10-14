@@ -8,17 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.shivam.dao.UserDao;
 import com.shivam.entities.LoginUser;
 import com.shivam.entities.RegisterUser;
 
 @Controller
-@SessionAttributes("userEmail")
+//@SessionAttributes("userEmail")
 public class UserController {
 	
 	@Autowired
@@ -28,13 +28,16 @@ public class UserController {
 	@Autowired
 	HttpSession session;
 	
-	@GetMapping("/register")
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String register(@ModelAttribute RegisterUser registerUser) 
 	{
+		if(session.getAttribute("userEmail")!=null)
+			return "redirect:/todos";
+		
 		return "register";
 	}
 	
-	@PostMapping("/RegisterUser")
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerUser(@Valid @ModelAttribute RegisterUser registerUser,BindingResult bindingResult,Model model) 
 	{
 		if(bindingResult.hasErrors())
@@ -44,16 +47,21 @@ public class UserController {
 		
 		userDao.saveUserDetails(registerUser);
 		session.setAttribute("userState", registerUser);
-		model.addAttribute("userEmail", registerUser.getEmail());
-		return "welcome";
+		session.setAttribute("message", "Registration Successful! Login to proceed");
+		//model.addAttribute("userEmail", registerUser.getEmail());
+		return "redirect:/login";
 	}
 	
-	@GetMapping("/login")
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginPage(@ModelAttribute LoginUser loginUser) {
+		
+		if(session.getAttribute("userEmail")!=null)
+			return "redirect:/todos";
+		
 		return "login";
 	}
 	
-	@PostMapping("/LoginUser")
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String loginUser(@Valid @ModelAttribute LoginUser loginUser,BindingResult bindingResult,Model model)
 	{
 		if(bindingResult.hasErrors())
@@ -69,13 +77,14 @@ public class UserController {
 		}
 		
 		session.setAttribute("userState", loginUser);
-		
-		model.addAttribute("userEmail", loginUser.getEmail());
-		return "welcome";
+		session.setAttribute("userEmail", loginUser.getEmail());
+//		model.addAttribute("userEmail", loginUser.getEmail());
+		return "redirect:/todos";
 	}
 	
-	@GetMapping("/Logout")
-	public String logoutUser(@ModelAttribute LoginUser loginUser) {
+	@RequestMapping(value = "/Logout",method = RequestMethod.GET)
+	public String logoutUser(@ModelAttribute LoginUser loginUser,SessionStatus sessionStatus) {
+		sessionStatus.setComplete();
 		request.getSession().invalidate();
 		return "login";
 	}
